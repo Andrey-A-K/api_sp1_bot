@@ -10,13 +10,14 @@ load_dotenv()
 
 logging.basicConfig(
     level=logging.DEBUG,
-    filename='program.log', 
+    filename='program.log',
     format='%(asctime)s, %(levelname)s, %(message)s, %(name)s'
 )
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-handler = RotatingFileHandler('my_logger.log', maxBytes=50000000, backupCount=5)
+handler = RotatingFileHandler(
+    'my_logger.log', maxBytes=50000000, backupCount=5)
 logger.addHandler(handler)
 
 PRAKTIKUM_TOKEN = os.getenv('PRAKTIKUM_TOKEN')
@@ -33,7 +34,7 @@ def parse_homework_status(homework):
         verdict = 'работа взята в ревью.'
     else:
         verdict = ('Ревьюеру всё понравилось, '
-        'можно приступать к следующему уроку.')
+                   'можно приступать к следующему уроку.')
     return f'У вас проверили работу "{homework_name}"!\n\n{verdict}'
 
 
@@ -55,15 +56,18 @@ def send_message(message, bot_client):
 
 def main():
     logger.debug('Запуск бота')
-    bot_client = telegram.Bot(token=TELEGRAM_TOKEN)  # проинициализировать бота здесь
+    # проинициализировать бота здесь
+    bot_client = telegram.Bot(token=TELEGRAM_TOKEN)
     current_timestamp = int(time.time())  # начальное значение timestamp
 
     while True:
         try:
             new_homework = get_homework_statuses(current_timestamp)
             if new_homework.get('homeworks'):
-                send_message(parse_homework_status(new_homework.get('homeworks')[0]), bot_client)
-            current_timestamp = new_homework.get('current_date', current_timestamp)  # обновить timestamp
+                send_message(parse_homework_status(
+                    new_homework.get('homeworks')[0]), bot_client)
+            current_timestamp = new_homework.get(
+                'current_date', current_timestamp)  # обновить timestamp
             time.sleep(300)  # опрашивать раз в пять минут
 
         except Exception as e:
