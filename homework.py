@@ -1,22 +1,24 @@
+import logging
 import os
 import time
-import logging
+from logging.handlers import RotatingFileHandler
+
 import requests
 import telegram
-from logging.handlers import RotatingFileHandler
 from dotenv import load_dotenv
 
 load_dotenv()
 
 logging.basicConfig(
     level=logging.DEBUG,
-    filename='program.log', 
+    filename='program.log',
     format='%(asctime)s, %(levelname)s, %(message)s, %(name)s'
 )
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-handler = RotatingFileHandler('my_logger.log', maxBytes=50000000, backupCount=5)
+handler = RotatingFileHandler(
+    'my_logger.log', maxBytes=50000000, backupCount=5)
 logger.addHandler(handler)
 
 PRAKTIKUM_TOKEN = os.getenv('PRAKTIKUM_TOKEN')
@@ -54,15 +56,18 @@ def send_message(message, bot_client):
 
 def main():
     logger.debug('Запуск бота')
-    bot_client = telegram.Bot(token=TELEGRAM_TOKEN)  # проинициализировать бота здесь
+    # проинициализировать бота здесь
+    bot_client = telegram.Bot(token=TELEGRAM_TOKEN)
     current_timestamp = int(time.time())  # начальное значение timestamp
 
     while True:
         try:
             new_homework = get_homework_statuses(current_timestamp)
             if new_homework.get('homeworks'):
-                send_message(parse_homework_status(new_homework.get('homeworks')[0]), bot_client)
-            current_timestamp = new_homework.get('current_date', current_timestamp)  # обновить timestamp
+                send_message(parse_homework_status(
+                    new_homework.get('homeworks')[0]), bot_client)
+            current_timestamp = new_homework.get(
+                'current_date', current_timestamp)  # обновить timestamp
             time.sleep(300)  # опрашивать раз в пять минут
 
         except Exception as e:
