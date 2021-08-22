@@ -10,11 +10,11 @@
 Клонировать репозиторий и перейти в него в командной строке:
 
 ```
-git clone https://github.com/Andrey-A-K/api_yamdb.git
+git clone https://github.com/Andrey-A-K/api_sp1_bot.git
 ```
 
 ```
-cd api_yamdb
+cd api_sp1_bot
 ```
 
 Cоздать и активировать виртуальное окружение:
@@ -37,14 +37,9 @@ python3 -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Выполнить миграции:
+
+Запустить бота:
 
 ```
-python3 manage.py migrate
-```
-
-Запустить проект:
-
-```
-python3 manage.py runserver
+/путь_к_питон_в_вашем_виртуальном_окружении/api_sp1_bot/venv/bin/python3 /путь_до_файла/api_sp1_bot/homework.py
 ```
